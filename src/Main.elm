@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser exposing (element)
 import Decoders exposing (Product, productsDecoder)
-import Html exposing (Html, div, h1, h2, h3, img, p, span, text)
+import Html exposing (Html, div, h2, h3, img, p, text)
 import Html.Attributes exposing (class, src)
 import Http
 
@@ -50,22 +50,25 @@ update msg model =
 
 
 renderProduct : Product -> Html Msg
-renderProduct product =
+renderProduct { images, title, price } =
     let
         defaultImage =
             "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg"
+
+        heroImage =
+            images |> List.head |> Maybe.withDefault defaultImage
     in
     div [ class "group" ]
         [ div
             [ class "object-contain h-5/6 aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8" ]
             [ img
-                [ src (product.images |> List.head |> Maybe.withDefault defaultImage)
+                [ src heroImage
                 , class "w-full h-full object-center object-cover group-hover:opacity-75"
                 ]
                 []
             ]
-        , h3 [ class "mt-4 text-sm text-gray-700" ] [ text product.title ]
-        , p [ class "mt-1 text-lg font-medium text-gray-900" ] [ text <| "$" ++ String.fromInt product.price ]
+        , h3 [ class "mt-4 text-sm text-gray-700" ] [ text title ]
+        , p [ class "mt-1 text-lg font-medium text-gray-900" ] [ text <| "$" ++ String.fromInt price ]
         ]
 
 
